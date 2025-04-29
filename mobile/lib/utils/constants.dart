@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ApiConstants {
   // Base URL for API
-  static const String baseUrl = 'http://0.0.0.0:8000'; // Backend running on port 8000
+  static const String baseUrl = 'http://0.0.0.0:5000'; // Backend running on port 5000
 }
 
 class AppColors {

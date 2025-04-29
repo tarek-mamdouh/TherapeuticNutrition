@@ -1,0 +1,324 @@
+Replit AI Agent Prompt: Therapeutic Nutrition App for Diabetic Patients (with Accessibility Support)
+Project Overview
+Develop a mobile application using Flutter, integrated with an AI model and a backend, to assist diabetic patients—especially those with visual impairments—in analyzing meals and receiving instant nutritional guidance. The app supports food image recognition, manual food entry, nutritional analysis, diabetes suitability evaluation, voice feedback, and a chatbot for user interaction. The app must support Arabic (primary) and English languages, with voice output in both. All steps must be documented clearly.
+Objective
+Build a complete, accessible mobile application that:
+
+Accepts food images or manual input.
+Uses AI to identify food and retrieve nutritional data.
+Evaluates food suitability for diabetic patients.
+Provides voice and text feedback.
+Includes a chatbot for dietary queries (voice and text input/output).
+Stores user profiles and medical conditions.
+Supports Arabic and English with accessibility features.
+
+Tech Stack
+
+Frontend: Flutter (Dart) for cross-platform mobile app development.
+AI Model: Lightweight food image classification model (e.g., MobileNetV2 or a custom CNN) suitable for mobile deployment or API inference.
+Backend: Python with FastAPI (preferred for lightweight APIs) or Flask, hosted on Replit.
+Database: SQLite for local storage of food/nutrition data and user profiles; optionally, Firebase for cloud storage.
+Text-to-Speech (TTS): Flutter TTS package (flutter_tts) for Arabic and English voice output.
+Speech-to-Text (STT): Speech recognition package (speech_to_text) for voice input.
+Chatbot: Simple rule-based or pre-trained model (e.g., Dialogflow or custom Python logic) for dietary Q&A.
+Image Processing: TensorFlow Lite for on-device AI model inference or API-based inference.
+Localization: Flutter intl package for Arabic and English support.
+
+Core Features
+
+Food Image Recognition:
+
+User captures/uploads a meal photo via device camera/gallery.
+AI model identifies food items and returns food names with confidence scores.
+If image recognition fails, display an error and prompt manual entry.
+
+
+Nutritional Information Retrieval:
+
+Map recognized foods to nutritional data (calories, carbs, protein, sugar, fat).
+Store nutritional data in a local SQLite database or JSON file (e.g., 100 common foods).
+Optionally, fetch data from a backend API if internet is available.
+
+
+Diabetes Suitability Evaluation:
+
+Evaluate food based on diabetic dietary guidelines (e.g., low sugar, low glycemic index).
+Use predefined thresholds (e.g., sugar < 5g per serving) or food categories (safe, moderate, avoid).
+Display result as "Safe," "Moderate," or "Avoid" with a brief explanation.
+
+
+Voice Feedback (Accessibility):
+
+Use TTS to read aloud:
+Food name(s).
+Nutritional summary (e.g., "200 calories, 10g carbs").
+Suitability (e.g., "This food is safe for diabetics").
+
+
+Support Arabic and English voice output.
+Ensure high contrast and large text for visual accessibility.
+
+
+Manual Entry Option:
+
+Provide a drag-and-drop or searchable list of pre-stored foods (e.g., "apple," "rice," "chicken").
+Allow users to select multiple items to compose a meal.
+Store foods in SQLite/JSON for offline access.
+
+
+Chatbot Assistant:
+
+Build an interactive chatbot to answer dietary questions, e.g.:
+"Can I eat bananas?"
+"Suggest a diabetic-friendly dinner."
+"How many calories in grilled chicken?"
+
+
+Support text and voice input/output (using STT and TTS).
+Use rule-based logic or a pre-trained model (e.g., Dialogflow or custom Python script).
+Store common Q&A in a local database for offline access.
+
+
+User Profile Management:
+
+Store user data (name, age, diabetes type, dietary preferences) in SQLite.
+Allow users to update profiles via a settings page.
+Ensure data privacy with local storage (no external sharing).
+
+
+Localization:
+
+Default to Arabic UI and voice output, with English as a toggleable option.
+Use Flutter’s intl package for RTL support and translations.
+Ensure all text and voice outputs are localized.
+
+
+
+AI Model Requirements
+
+Model Type: Lightweight image classification model (e.g., MobileNetV2, EfficientNet-Lite).
+Training Data: Use a dataset of common foods (e.g., Food-101 or a custom dataset with 100+ food classes).
+Output: Food name and confidence score (e.g., {"food": "pizza", "confidence": 0.92}).
+Deployment:
+Prefer on-device inference using TensorFlow Lite for offline capability.
+Alternatively, host the model on the backend and expose it via a FastAPI endpoint.
+
+
+Model Size: Optimize for mobile (e.g., <50MB).
+Preprocessing: Handle image resizing and normalization within the app.
+
+Backend Requirements
+
+Framework: FastAPI for RESTful APIs (or Flask if simpler).
+Endpoints:
+POST /predict: Accept food image, return food name and confidence.
+GET /nutrition: Accept food name, return nutritional data.
+POST /chat: Accept user query, return chatbot response.
+
+
+Deployment: Host on Replit with a public URL.
+Database: SQLite for food data, nutritional info, and chatbot Q&A.
+Security: Use HTTPS and basic authentication for API calls.
+
+Deliverables
+
+Flutter App Source Code:
+
+Full Flutter project with:
+Home screen (camera, manual entry, chatbot, profile).
+Image capture/upload UI.
+Nutritional display UI.
+Chatbot interface (text and voice).
+Settings for language and profile.
+
+
+File structure:lib/
+  main.dart
+  screens/
+    home.dart
+    image_upload.dart
+    nutrition_display.dart
+    chatbot.dart
+    profile.dart
+  models/
+    user.dart
+    food.dart
+  services/
+    image_recognition.dart
+    nutrition_service.dart
+    chatbot_service.dart
+    tts_service.dart
+    stt_service.dart
+assets/
+  foods.json
+  model.tflite
+
+
+
+
+Backend Source Code:
+
+FastAPI/Flask project with:
+API endpoints for image recognition, nutrition data, and chatbot.
+SQLite database schema for foods, nutrition, and Q&A.
+
+
+File structure:main.py
+models/
+  food_classifier.py
+database/
+  foods.db
+  init_db.py
+
+
+
+
+AI Model:
+
+Trained TensorFlow Lite model (.tflite) for food recognition.
+Python script for model training (if custom dataset used).
+Documentation on model performance (accuracy, size, inference time).
+
+
+Documentation:
+
+Setup Guide: How to run the Flutter app and backend on Replit.
+Code Overview: Explain each major component (frontend, backend, AI).
+API Docs: Swagger/OpenAPI documentation for backend endpoints.
+Model Docs: Describe AI model training, dataset, and deployment.
+User Guide: How diabetic patients use the app (with screenshots).
+File structure:docs/
+  setup.md
+  code_overview.md
+  api_docs.md
+  model_docs.md
+  user_guide.md
+
+
+
+
+
+Implementation Steps
+
+Setup Environment:
+
+Initialize a Replit project with Flutter and Python environments.
+Install dependencies: Flutter, FastAPI, TensorFlow, SQLite, flutter_tts, speech_to_text, intl.
+
+
+Database Setup:
+
+Create SQLite database with tables:
+foods (name, calories, carbs, protein, sugar, fat, diabetic_suitability).
+users (id, name, age, diabetes_type, preferences).
+qa (question, answer, language).
+
+
+Populate with sample data (100 foods, 50 Q&A pairs).
+
+
+AI Model Development:
+
+Train a lightweight model (MobileNetV2) on a food dataset.
+Convert to TensorFlow Lite format.
+Integrate into Flutter using tflite package or expose via API.
+
+
+Backend Development:
+
+Build FastAPI server with /predict, /nutrition, /chat endpoints.
+Connect to SQLite database.
+Deploy on Replit with a public URL.
+
+
+Flutter App Development:
+
+Create UI screens for home, image upload, nutrition display, chatbot, profile.
+Implement image capture/upload with image_picker.
+Integrate AI model (on-device or API).
+Add TTS and STT for accessibility.
+Implement chatbot with text/voice input/output.
+Add localization for Arabic/English.
+
+
+Testing:
+
+Test image recognition accuracy (>80% on common foods).
+Test voice input/output in Arabic and English.
+Test chatbot responses for relevance.
+Test offline functionality (manual entry, local database).
+
+
+Documentation:
+
+Write detailed docs for setup, code, APIs, model, and user guide.
+Include screenshots and sample API responses.
+
+
+
+Constraints
+
+Replit Limitations: Ensure code runs within Replit’s resource limits (CPU, memory, storage).
+Offline Support: Prioritize on-device AI and local storage for core features.
+Accessibility: Ensure voice feedback and high-contrast UI for visually impaired users.
+Model Size: Keep AI model <50MB for mobile deployment.
+Language: Arabic is primary; ensure RTL and voice support are robust.
+
+Enhancements 
+
+Offline-First Design: Cache API responses and use local SQLite for all core features to ensure functionality without internet.
+Accessibility Features:
+Add haptic feedback for visually impaired users during navigation.
+Support screen reader compatibility with Flutter’s semantics.
+
+
+Chatbot Intelligence:
+Use a pre-trained small language model (e.g., DistilBERT) for better Q&A if Replit resources allow.
+Include meal planning suggestions (e.g., "Diabetic-friendly breakfast ideas").
+
+
+User Onboarding:
+Add a tutorial screen to guide first-time users.
+Include a quiz to assess diabetes knowledge and tailor recommendations.
+
+
+Analytics:
+Log user interactions (e.g., foods scanned, questions asked) locally for personalized insights.
+Display weekly dietary summaries (e.g., average carbs consumed).
+
+
+
+Final Output
+
+Full source code for:
+Flutter app (frontend).
+FastAPI backend.
+TensorFlow Lite model and training script.
+
+
+SQLite database with sample data.
+Comprehensive documentation covering setup, code, APIs, model, and user guide.
+Deployed backend on Replit with a public URL.
+Tested app APK for Android (and iOS if possible).
+
+Documentation Requirements
+
+Provide step-by-step explanations for:
+Setting up the Replit environment.
+Training and deploying the AI model.
+Running the backend and frontend.
+Using the app as a diabetic patient.
+
+
+Include diagrams (e.g., app architecture, database schema).
+Ensure all code is commented for clarity.
+
+Acceptance Criteria
+
+App runs on Replit without errors.
+Image recognition identifies at least 80% of common foods correctly.
+Voice feedback works in Arabic and English.
+Chatbot answers dietary questions accurately (90% relevance).
+App supports offline mode for manual entry and nutritional data.
+UI is accessible (voice, high contrast, large text).
+Documentation is complete and clear.

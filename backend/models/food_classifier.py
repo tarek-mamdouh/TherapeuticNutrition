@@ -3,12 +3,14 @@ import numpy as np
 import os
 from PIL import Image
 import io
+from .openai_integration import openai_integration
 
 class FoodClassifier:
     def __init__(self):
         self.model = None
         self.labels = []
         self.model_loaded = False
+        self.openai_available = openai_integration.is_available()
         self.load_model()
         
     def load_model(self):
@@ -30,6 +32,7 @@ class FoodClassifier:
             "dates", "hummus", "falafel", "shawarma", "tabbouleh", "baklava"
         ]
         self.model_loaded = True
+        print(f"Food classifier initialized. OpenAI integration: {'Available' if self.openai_available else 'Not available'}")
         
     def preprocess_image(self, image_data):
         """
@@ -51,16 +54,40 @@ class FoodClassifier:
         """
         Predict food from image data.
         
-        In a real implementation, this would use the TensorFlow Lite model.
-        For now, we'll simulate predictions with a fixed set of responses.
+        If OpenAI integration is available, use that for more accurate predictions.
+        Otherwise, fall back to the simulated model.
         """
         if not self.model_loaded:
             return {"error": "Model not loaded"}
         
-        # Simulate model prediction
-        # In production, this would use the interpreter to run inference
+        # Try OpenAI first if available
+        if self.openai_available:
+            try:
+                print("Using OpenAI for food recognition...")
+                results = openai_integration.analyze_food_image(image_data)
+                
+                # Check if results are valid
+                if results and not any(["error" in item for item in results]):
+                    # Process the results - ensure all entries have required fields
+                    processed_results = []
+                    for item in results:
+                        if isinstance(item, dict) and "food" in item and "confidence" in item:
+                            processed_results.append({
+                                "food": item["food"],
+                                "confidence": item["confidence"]
+                            })
+                    
+                    if processed_results:
+                        # Sort by confidence, highest first
+                        processed_results.sort(key=lambda x: x["confidence"], reverse=True)
+                        print(f"OpenAI identified {len(processed_results)} food items")
+                        return processed_results
+            except Exception as e:
+                print(f"Error using OpenAI for food recognition: {e}")
+                # Fall back to simulated model
         
-        # Randomly select a food label and confidence score for demonstration
+        # Simulate model prediction if OpenAI is unavailable or fails
+        print("Using fallback food recognition model...")
         import random
         random.seed(sum(image_data[:100]))  # Use image data to seed for consistency
         
